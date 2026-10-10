@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NourishHer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="flowers" aria-hidden="true">🌸 🌷 🌼</div>
+    <h1>NourishHer</h1>
+    <p class="tagline">Gentle support for every stage</p>
+  </header>
+
+  <!-- WELCOME (shown first) -->
+  <section class="view" id="view-welcome" aria-label="Welcome"></section>
+
+  <!-- HOME -->
+  <section class="view" id="view-today" aria-label="Home"></section>
+
+  <!-- CALENDAR -->
+  <section class="view" id="view-calendar" aria-label="Calendar">
+    <div class="card">
+      <div class="cal-h">
+        <button class="btn ghost small" id="prevM" aria-label="Previous month">Back</button>
+        <h2 id="monthTitle"></h2>
+        <button class="btn ghost small" id="nextM" aria-label="Next month">Next</button>
+      </div>
+      <div class="cal" id="calGrid"></div>
+      <div class="legend">
+        <span><i style="background:var(--rose)"></i>Period</span>
+        <span><i class="dash"></i>Expected period</span>
+        <span><i style="background:var(--gold)"></i>Ovulation</span>
+        <span><i style="background:var(--peach-t)"></i>Fertile</span>
+        <span><i style="background:var(--mauve-t)"></i>Before period</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Log your period 🌷</h2>
+      <p class="sub">Tap a day above, or choose a date here.</p>
+
+      <label class="f" for="pStart">First day of bleeding</label>
+      <input type="date" id="pStart">
+
+      <label class="f" for="pDays">How many days?</label>
+      <input type="number" id="pDays" min="1" max="15" value="5" inputmode="numeric">
+
+      <label class="f" id="flowLbl">How was the flow?</label>
+      <div class="chips" role="radiogroup" aria-labelledby="flowLbl">
+        <label class="chip"><input type="radio" name="pflow" value="Light"><span>Light</span></label>
+        <label class="chip"><input type="radio" name="pflow" value="Normal" checked><span>Normal</span></label>
+        <label class="chip"><input type="radio" name="pflow" value="Heavy"><span>Heavy</span></label>
+        <label class="chip"><input type="radio" name="pflow" value="More blood clots"><span>More blood clots</span></label>
+        <label class="chip"><input type="radio" name="pflow" value="Spotting"><span>Spotting</span></label>
+        <label class="chip"><input type="radio" name="pflow" value="Other"><span>Something else</span></label>
+      </div>
+      <input type="text" id="pFlowOther" maxlength="60" placeholder="Describe it in your own words" aria-label="Describe your flow" hidden>
+
+      <label class="f" for="pPain">Pain: <output id="pPainV">0</output> out of 10</label>
+      <input type="range" id="pPain" min="0" max="10" value="0">
+
+      <label class="f" for="pNote">Anything else you want to note?</label>
+      <input type="text" id="pNote" maxlength="120" placeholder="For example: back pain, tired, mood low">
+
+      <div class="actions"><button class="btn" id="savePeriod">Save</button></div>
+      <p class="small muted" id="pMsg" role="status"></p>
+    </div>
+
+    <div class="card">
+      <h3>Your past periods</h3>
+      <ul class="list" id="pList"></ul>
+    </div>
+  </section>
+
+  <!-- CHECK-IN -->
+  <section class="view" id="view-symptoms" aria-label="Daily check-in">
+    <div class="card">
+      <h2>How are you today? 🌼</h2>
+      <label class="f" for="sDate">Date</label>
+      <input type="date" id="sDate">
+
+      <label class="f">What are you feeling?</label>
+      <div class="chips" id="symChips"></div>
+      <div class="row add-row">
+        <input type="text" id="customSym" maxlength="30" placeholder="Add your own, like dizziness" aria-label="Add your own symptom">
+        <button class="btn ghost small" id="addSym" type="button">Add</button>
+      </div>
+
+      <label class="f" for="sMood">Mood: <output id="sMoodV">3</output> out of 5</label>
+      <input type="range" id="sMood" min="1" max="5" value="3">
+
+      <label class="f" for="sSleep">Hours of sleep</label>
+      <input type="number" id="sSleep" min="0" max="16" step="0.5" value="7" inputmode="decimal">
+
+      <div class="actions"><button class="btn" id="saveSym">Save and get ideas</button></div>
+      <p class="small muted" id="sMsg" role="status"></p>
+    </div>
+
+    <div id="sTips"></div>
+
+    <div class="card">
+      <h3>Your last 14 days</h3>
+      <p class="sub">Each bar is how many symptoms you noted that day.</p>
+      <div id="symChart"></div>
+      <h3 class="gap-top">Most common this month</h3>
+      <ul class="list" id="symTop"></ul>
+    </div>
+  </section>
+
+  <!-- MY STAGE -->
+  <section class="view" id="view-stage" aria-label="My stage">
+    <div id="stageBox"></div>
+  </section>
+
+  <!-- CARE -->
+  <section class="view" id="view-care" aria-label="Care guide">
+    <div id="careTop"></div>
+    <div class="card" id="careList"></div>
+
+    <div class="card">
+      <h3>Summary for your doctor</h3>
+      <p class="sub">Makes a short note from your logs that you can copy and share.</p>
+      <div class="actions">
+        <button class="btn" id="mkSummary">Make summary</button>
+        <button class="btn ghost" id="cpSummary">Copy</button>
+      </div>
+      <textarea id="summary" readonly aria-label="Doctor summary" placeholder="Your summary will appear here."></textarea>
+    </div>
+
+    <div class="card">
+      <h3>Your privacy 🌿</h3>
+      <p class="small muted">Everything is saved only in this browser, on this device. Nothing is sent anywhere.</p>
+      <div class="actions"><button class="btn ghost" id="wipe">Delete all my data</button></div>
+    </div>
+  </section>
+</div>
+
+<nav class="tabs" aria-label="Main">
+  <div class="in">
+    <button data-tab="today" aria-current="page"><span class="ic" aria-hidden="true">🌸</span>Home</button>
+    <button data-tab="calendar"><span class="ic" aria-hidden="true">🌷</span>Calendar</button>
+    <button data-tab="symptoms"><span class="ic" aria-hidden="true">🌼</span>Check-in</button>
+    <button data-tab="stage"><span class="ic" aria-hidden="true">🌺</span>My stage</button>
+    <button data-tab="care"><span class="ic" aria-hidden="true">🌿</span>Care</button>
+  </div>
+</nav>
+
+<script src="script.js"></script>
+</body>
+</html>
